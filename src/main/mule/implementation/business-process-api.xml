@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<file:config name="File_Config" doc:name="File Config" doc:id="34ceff4c-bc3f-4247-a915-c80ef578b4bb" />
+	<flow name="business-process-apiFlow" doc:id="a16d0bc0-5264-40cc-b7d9-fc1a455cab5a" >
+		<http:listener doc:name="Listener" doc:id="2c0341eb-c7c5-4196-a012-7bad2f14b0a0" config-ref="HTTP_Listener_config" path="${http.path}"/>
+		<logger level="INFO" doc:name="Logger" doc:id="792104ea-fd69-45f5-8f09-bc0dedc82d45" message="#[vars.businessUnitsWhitelist]" />
+		<ee:transform doc:name="payload" doc:id="8da2fafb-a3eb-4427-911e-1a32a71c2bf4">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+ "firstName": "Gilles",
+ "lastName": "Dehaut",
+ "allowedBusinessUnits": ["lu", "be", "ch"]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="5d1c54d7-8892-4931-8d88-95aed1baea06" message="End of request" />
+		<ee:transform doc:name="Transform Message" doc:id="4eec18c9-ec07-4e9e-aa13-f98903153643" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var list = p("businessUnitsWhitelist")
+---
+payload update {
+  case allowedBusinessUnits at .allowedBusinessUnits -> 
+    allowedBusinessUnits filter ((item, index) -> list splitBy "," contains item)
+}
+
+ 
+
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
