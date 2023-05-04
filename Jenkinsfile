@@ -1,51 +1,30 @@
 pipeline {
+    agent any
 
-agent any
+    stages {
+        stage('Munit Test') {
+            steps {
+                echo 'Testing..'
+                bat 'mvn clean test'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building..'
+                bat 'mvn clean install'
+            }
+        }
+        stage('Deploy') {
+          environment {
 
-stages {
+            ANYPOINT_CREDENTIALS = credentials('anypoint.credential')
 
-stage('Build Application') {
-
-steps {
-
-bat 'mvn clean install'
-
-}
-
-}
-
-stage('Test') {
-
-steps {
-
-echo 'Application in Testing Phase…'
-
-bat 'mvn test'
-
-}
-
-}
-
-stage('Deploy CloudHub') {
-
-environment {
-
-ANYPOINT_CREDENTIALS = credentials('anypoint.credential')
-
-}
-
-steps {
-
-echo 'Deploying mule project due to the latest code commit…'
-
-echo 'Deploying to the configured environment….'
-
-bat 'mvn package deploy -DmuleDeploy -Dusername=${ANYPOINT_CREDENTIALS_USR} -Dpassword=${ANYPOINT_CREDENTIALS_PSW} -DworkerType=Micro -Dworkers=1 -Dregion=us-west-2'
-
-}
-
-}
-
-}
-
+            }
+            steps {
+                echo 'Deploying to cloudHub...'
+                bat 'mvn clean deploy -DmuleDeploy -Dusername=${ANYPOINT_CREDENTIALS_USR} -Dpassword=${ANYPOINT_CREDENTIALS_PSW} -Denv=Sandbox -Dappname=world-countries -Dbusiness=cap -DvCore=Micro -Dworkers=1'
+                echo 'Deployed...'
+            }
+        }
+    }
 }
