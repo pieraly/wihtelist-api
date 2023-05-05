@@ -33,8 +33,8 @@
 				    <cloudHubDeployment>
 					<uri>https://anypoint.mulesoft.com</uri>
 					<muleVersion>4.4.0</muleVersion>
-					<username>${anypoint.username}</username>
-					<password>${anypoint.password}</password>
+					<username>${username}</username>
+					<password>${password}</password>
 					<applicationName>withelist-api</applicationName>
 					<environment>Sandbox</environment>
 					<workerType>MICRO</workerType>
