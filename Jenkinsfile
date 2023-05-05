@@ -17,12 +17,12 @@ pipeline {
         stage('Deploy') {
           environment {
 
-            ANYPOINT_CREDENTIALS = credentials('anypoint.credential')
+            ANYPOINT_CREDENTIALS = credentials('anypointPlatform')
 
             }
             steps {
                 echo 'Deploying to cloudHub...'
-                bat 'mvn clean deploy -DmuleDeploy -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW} -Denv=Sandbox -Dappname=whitelist-api -DvCore=Micro -Dworkers=1'
+                bat 'mvn clean deploy -DmuleDeploy -Dusername=${ANYPOINT_CREDENTIALS_USR} -Dpassword=${ANYPOINT_CREDENTIALS_PSW} -Denv=Sandbox -Dappname=whitelist-api -DvCore=Micro -Dworkers=1'
                 echo 'Deployed...'
             }
         }
