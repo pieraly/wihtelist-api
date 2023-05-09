@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
 	<file:config name="File_Config" doc:name="File Config" doc:id="34ceff4c-bc3f-4247-a915-c80ef578b4bb" />
 	<flow name="business-process-apiFlow" doc:id="a16d0bc0-5264-40cc-b7d9-fc1a455cab5a" >
-		<http:listener doc:name="Listener" doc:id="2c0341eb-c7c5-4196-a012-7bad2f14b0a0" config-ref="HTTP_Listener_config" path="${http.path}"/>
+		<http:listener doc:name="Listener" doc:id="2c0341eb-c7c5-4196-a012-7bad2f14b0a0" config-ref="HTTP_Listener_config" path="business"/>
 		<logger level="INFO" doc:name="Logger" doc:id="792104ea-fd69-45f5-8f09-bc0dedc82d45" message="#[vars.businessUnitsWhitelist]" />
 		<ee:transform doc:name="payload" doc:id="8da2fafb-a3eb-4427-911e-1a32a71c2bf4">
 			<ee:message>
